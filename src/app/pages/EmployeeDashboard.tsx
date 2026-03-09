@@ -61,7 +61,14 @@ export default function EmployeeDashboard() {
         <div className="mb-6">
           <Link to="/employee/create-ticket">
             <Button 
-              style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)' }}
+              style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)', background: `linear-gradient(
+              to bottom, 
+              #e2ec4f 10%,
+              #becf02 20%,
+              #aebb00 70%,
+              #8f9900 100%
+            )`
+              }}
               className="hover:bg-opacity-90 h-11 text-white"
             >
               <PlusCircle className="w-4 h-4 mr-2" />

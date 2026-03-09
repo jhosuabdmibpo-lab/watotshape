@@ -50,10 +50,14 @@ export default function CreateTicket() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-semibold text-gray-900">Create New Ticket</h1>
-          <p className="text-gray-600 mt-1">Submit a request to HR</p>
+          <p className="text-gray-600 mt-1 ">Submit a request to HR</p>
         </div>
 
-        <Card className="shadow-sm border-gray-200">
+        <Card className="shadow-sm border-gray-200"
+        style={{
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(2, 14, 39, 0.3)'
+      }}>
           <CardHeader className="border-b border-gray-200">
             <CardTitle>Ticket Details</CardTitle>
           </CardHeader>
@@ -196,16 +200,29 @@ export default function CreateTicket() {
               <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
-                  style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)' }}
+                  style={{ background: `linear-gradient(
+                  to bottom, 
+                  #d4e033 0%,
+                  #b0bf00 50%,
+                  #9ca800 50%,
+                  #828d00 100%
+                )`}}
                   className="hover:bg-opacity-90 h-11 px-8 text-white"
                 >
                   Submit Ticket
                 </Button>
                 <Button
                   type="button"
-                  variant="outline"
+                  className="h-11 px-8 text-white font-bold transition-all duration-300 hover:brightness-110 active:scale-[0.95] border-none rounded-md"
+                  style={{ 
+                    background: `linear-gradient(
+                      to bottom, 
+                      #ff4d4d 0%,    /* Light reflection (Bright Red) */
+                      #e60000 50%,   /* Mid-top (Standard Red) */
+                      #cc0000 50%,   /* Mid-bottom (Mirror line - deeper red) */
+                      #800000 100%   /* Bottom base (Deep Maroon) */
+                    )`}}
                   onClick={() => navigate("/employee")}
-                  className="h-11 px-8"
                 >
                   Cancel
                 </Button>
