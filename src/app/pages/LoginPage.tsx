@@ -14,7 +14,7 @@ export default function LoginPage() {
   const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"employee" | "hr" | "admin">("employee");
+  const [selectedRole, setSelectedRole] = useState<"employee" | "hr" | "admin" | "superadmin">("employee");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +31,16 @@ export default function LoginPage() {
       };
     } else if (selectedRole === "hr") {
       mockUser = mockUsers.find(u => u.role === "hr")!;
-    } else {
+    } else if (selectedRole === "admin") {
       mockUser = mockUsers.find(u => u.role === "admin")!;
+    } else {
+      mockUser = {
+        id: "SA-001",
+        name: "Super Admin",
+        email: "super@company.com",
+        role: "superadmin" as any,
+        department: "IT",
+      };
     }
 
     setUser(mockUser);
@@ -42,23 +50,32 @@ export default function LoginPage() {
       navigate("/admin");
     } else if (selectedRole === "hr") {
       navigate("/hr");
+    } else if (selectedRole === "superadmin") {
+      navigate("/superadmin");
     } else {
       navigate("/employee");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg border-none overflow-hidden" 
-    style={{ 
-    background: 'linear-gradient(to top, rgba(176, 191, 0, 0.15) 0%, white 25%)' 
-  }}>
+    <div className="min-h-screen bg-[#0f172a] flex items-center justify-center p-4 relative overflow-hidden">
+      <img 
+        src={logo} 
+        alt="Background Logo" 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vh] object-cover opacity-10 blur-lg -rotate-6"
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent backdrop-blur-sm"></div>
+      
+      <Card className="w-full max-w-md shadow-2xl border-none overflow-hidden z-10" 
+        style={{
+          background: 'linear-gradient(to top, #e9f09f 0%, white 40%)',
+        }}>
         <CardHeader className="space-y-4 text-center">
           <div className="flex justify-center">
             <img 
               src={logo} 
               alt="HR Ticketing System Logo" 
-              className="w-16 h-16 rounded-2xl shadow-[0_4px_12px_rgba(176,191,0,0.4)] object-cover"/>
+              className="w-16 h-16 rounded-2xl shadow-[0_4px_12px_rgba(2,14,39,0.4)] object-cover"/>
           </div>
           <div>
             <CardTitle className="text-2xl">HR Ticketing System</CardTitle>
@@ -103,13 +120,13 @@ export default function LoginPage() {
 
             <Button 
               type="submit" 
-              className="w-full h-11 text-white font-bold transition-all duration-300 hover:brightness-110 active:scale-[0.98] border-none shadow-md"
+              className="w-full h-11 text-#020e27 font-bold transition-all duration-300 hover:brightness-110 active:scale-[0.98] border-none shadow-md"
               style={{ 
                 background: `linear-gradient(
                   to bottom, 
-                  #c4d400 10%, 
-                  #b0bf00 20%, 
-                  #a2af00 70%, 
+                  #edf3a9 10%, 
+                  #dbeb2d 20%, 
+                  #c4d109 70%, 
                   #8e9a00 100%
                 )`,
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 6px rgba(0,0,0,0.1)'
@@ -183,6 +200,27 @@ export default function LoginPage() {
                   }}
                   >
                   Admin
+                </Button>
+                <Button
+                  type="button"
+                  variant={selectedRole === "superadmin" ? "default" : "outline"}
+                  onClick={() => setSelectedRole("superadmin")}
+                  size="sm"
+                  className={`flex-1 transition-all duration-200 shadow-sm font-medium ${
+                    selectedRole === "superadmin" 
+                      ? "text-white border-none" 
+                      : "bg-white text-slate-700 border-slate-200"
+                  }`}
+                  style={{
+                    background: selectedRole === "superadmin"
+                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)" // Glossy Navy (Active)
+                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)", // Glossy White (Inactive)
+                    boxShadow: selectedRole === "superadmin"
+                      ? "inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2)"
+                      : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
+                  }}
+                  >
+                  Super Admin
                 </Button>
               </div>
             </div>
