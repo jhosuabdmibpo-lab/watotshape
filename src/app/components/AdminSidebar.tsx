@@ -1,65 +1,56 @@
-import { Link, useLocation, useNavigate } from "react-router";
-import { cn } from "../components/ui/utils";
-import { 
-  LayoutDashboard, 
-  Ticket, 
-  UserCircle, 
-  FileText, 
+import { Link, useLocation } from "react-router";
+import {
+  LayoutDashboard,
+  ShieldCheck,
+  Users,
   Settings,
-  LogOut
+  Building2,
 } from "lucide-react";
+import logo from "../../assets/logo.png";
 
-interface AdminSidebarProps {
-  className?: string;
-}
-
-export function AdminSidebar({ className }: AdminSidebarProps) {
+const NavLink = ({ to, icon: Icon, children, exact = false }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const navItems = [
-    { path: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  ];
-
+  const isActive = exact
+    ? location.pathname === to
+    : location.pathname.startsWith(to);
   return (
-    <div className={cn("w-64 bg-white border-r border-gray-200 h-screen sticky top-0", className)}>
-      <div className="p-6">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-lg">HR Tickets</span>
-        </div>
+    <Link
+      to={to}
+      className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+        isActive
+          ? "bg-white/10 text-white"
+          : "text-gray-400 hover:bg-white/10 hover:text-white"
+      }`}
+    >
+      <Icon className="w-5 h-5 mr-3" />
+      <span>{children}</span>
+    </Link>
+  );
+};
+
+export function AdminSidebar() {
+  return (
+    <div
+      className="w-64 text-white flex flex-col h-screen sticky top-0"
+      style={{ background: "linear-gradient(180deg, #020e27 0%, #4d5900 100%)" }}
+    >
+      <div className="flex items-center justify-center p-4 border-b border-white/10 h-20">
+        <img src={logo} alt="Logo" className="h-8 w-auto mr-2 filter drop-shadow-[0_0_6px_#b0bf00]" />
+        <h2 className="text-xl font-semibold tracking-tight">HR System</h2>
       </div>
-
-      <nav className="px-3 space-y-1">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.path;
-          
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm",
-                isActive
-                  ? "bg-blue-50 text-blue-700 font-medium"
-                  : "text-gray-700 hover:bg-gray-50"
-              )}
-            >
-              <Icon className="w-5 h-5" />
-              {item.label}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 p-4 space-y-2">
+        <NavLink to="/admin" icon={LayoutDashboard}>
+          Admin Dashboard
+        </NavLink>
+        <NavLink to="/superadmin" icon={ShieldCheck}>
+          Super Admin
+        </NavLink>
+        {/* You can add more links here as needed */}
       </nav>
-
-      <div className="absolute bottom-0 w-full p-3 border-t border-gray-200">
-        <button 
-          onClick={() => navigate("/")}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg w-full text-gray-700 hover:bg-gray-50 transition-colors text-sm"
-        >
-          <LogOut className="w-5 h-5" />
-          Logout
-        </button>
+      <div className="p-4 border-t border-white/10">
+        <NavLink to="/settings" icon={Settings}>
+          Settings
+        </NavLink>
       </div>
     </div>
   );

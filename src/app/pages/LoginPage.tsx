@@ -75,7 +75,7 @@ export default function LoginPage() {
             <img 
               src={logo} 
               alt="HR Ticketing System Logo" 
-              className="w-16 h-16 rounded-2xl shadow-[0_4px_12px_rgba(2,14,39,0.4)] object-cover"/>
+              className="w-16 h-16 rounded-2xl object-cover"/>
           </div>
           <div>
             <CardTitle className="text-2xl">HR Ticketing System</CardTitle>

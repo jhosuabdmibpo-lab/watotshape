@@ -8,6 +8,12 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../components/ui/popover";
+import { Calendar } from "../components/ui/calendar";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -34,15 +40,16 @@ import {
 import {
   Ticket,
   Users,
-  Activity,
   Calendar as CalendarIcon,
   Shield,
   UserPlus,
   Search,
   Filter,
-  MoreHorizontal
+  MoreHorizontal,
+  ArrowDownUp
 } from "lucide-react";
 import { mockTickets, mockUsers } from "../data/mockData";
+import { format } from "date-fns";
 
 // Mock Activity Logs
 const mockActivities = [
@@ -57,7 +64,9 @@ export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("date-desc");
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [date, setDate] = useState<Date>();
 
   const handleCreateUser = () => {
     // In a real app, you would handle form validation and API calls here.
@@ -72,15 +81,34 @@ export default function SuperAdminDashboard() {
   // Mocking total users count including those not in mockUsers array for demo
   const totalUsers = mockUsers.length + 15; 
   const activeAdmins = mockUsers.filter(u => u.role === 'admin').length;
-  const systemHealth = "98%";
 
-  // Filter Logic for Tickets
-  const filteredTickets = mockTickets.filter(ticket => {
-    const matchesStatus = filterStatus === "all" || ticket.status === filterStatus;
-    const matchesSearch = ticket.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          ticket.id.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  // Filter and Sort Logic for Tickets
+  const sortedAndFilteredTickets = mockTickets
+    .filter(ticket => {
+      const matchesStatus = filterStatus === "all" || ticket.status === filterStatus;
+      const matchesSearch = ticket.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            ticket.id.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesDate = !date || new Date(ticket.createdAt).toDateString() === date.toDateString();
+      return matchesStatus && matchesSearch && matchesDate;
+    })
+    .sort((a, b) => {
+      const [sortBy, sortOrder] = sortOption.split('-');
+      const order = sortOrder === 'asc' ? 1 : -1;
+
+      if (sortBy === 'date') {
+        return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * order;
+      }
+      if (sortBy === 'name') {
+        return a.employeeName.localeCompare(b.employeeName) * order;
+      }
+      if (sortBy === 'priority') {
+        const priorityOrder = { high: 3, medium: 2, low: 1 };
+        const priorityA = priorityOrder[a.priority as keyof typeof priorityOrder] || 0;
+        const priorityB = priorityOrder[b.priority as keyof typeof priorityOrder] || 0;
+        return (priorityA - priorityB) * order;
+      }
+      return 0;
+    });
 
   // Combine mock users with some extra dummy data for the table
   const allUsers = [
@@ -90,23 +118,40 @@ export default function SuperAdminDashboard() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-50">
       <AdminSidebar />
 
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto" style={{ background: "linear-gradient(135deg, #f7f9e6 0%, #eef2cc 100%)" }}>
         <div className="max-w-7xl mx-auto px-8 py-8">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900">Super Admin Dashboard</h1>
-              <p className="text-gray-600 mt-1">System-wide control, monitoring, and administration</p>
+              <h1 className="text-3xl font-semibold text-[#4e5668]">Super Admin Dashboard</h1>
+              <p className="text-slate-600 mt-1">System-wide control, monitoring, and administration</p>
             </div>
             <div className="flex gap-3">
-               <Button variant="outline" className="flex items-center gap-2 bg-white" onClick={() => setIsAddUserModalOpen(true)}>
-                <CalendarIcon className="w-4 h-4" />
-                <span>Select Period</span>
-              </Button>
-              <Button className="bg-slate-900 text-white hover:bg-slate-800 shadow-md" onClick={() => setIsAddUserModalOpen(true)}>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={`w-auto justify-start text-left font-normal bg-white ${
+                      !date && "text-muted-foreground"
+                    }`}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>Select Period</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <Button className="bg-[#4e5668] text-white hover:bg-[#4e5668]/90 shadow-md" onClick={() => setIsAddUserModalOpen(true)}>
                 <UserPlus className="w-4 h-4 mr-2" />
                 Add New User
               </Button>
@@ -119,8 +164,8 @@ export default function SuperAdminDashboard() {
               onClick={() => setActiveTab("overview")}
               className={`pb-3 px-1 text-sm font-medium transition-all ${
                 activeTab === "overview" 
-                  ? "border-b-2 border-slate-900 text-slate-900" 
-                  : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-b-2 border-[#4e5668] text-[#4e5668]" 
+                  : "text-slate-500 hover:text-slate-700"
               }`}
             >
               Overview & Tickets
@@ -129,18 +174,18 @@ export default function SuperAdminDashboard() {
               onClick={() => setActiveTab("users")}
               className={`pb-3 px-1 text-sm font-medium transition-all ${
                 activeTab === "users" 
-                  ? "border-b-2 border-slate-900 text-slate-900" 
-                  : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-b-2 border-[#4e5668] text-[#4e5668]" 
+                  : "text-slate-500 hover:text-slate-700"
               }`}
-            >
+            > 
               User Management
             </button>
             <button
               onClick={() => setActiveTab("activity")}
               className={`pb-3 px-1 text-sm font-medium transition-all ${
                 activeTab === "activity" 
-                  ? "border-b-2 border-slate-900 text-slate-900" 
-                  : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-b-2 border-[#4e5668] text-[#4e5668]" 
+                  : "text-slate-500 hover:text-slate-700"
               }`}
             >
               Activity Logs
@@ -150,33 +195,32 @@ export default function SuperAdminDashboard() {
           {activeTab === "overview" && (
             <div className="space-y-6">
               {/* KPI Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <KPICard title="Total Users" value={totalUsers} icon={Users} color="text-purple-600" />
-                <KPICard title="Total Tickets" value={totalTickets} icon={Ticket} color="text-blue-600" />
-                <KPICard title="Active Admins" value={activeAdmins} icon={Shield} color="text-indigo-600" />
-                <KPICard title="System Health" value={systemHealth} icon={Activity} color="text-green-600" />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <KPICard title="Total Users" value={totalUsers} icon={Users} color="text-[#4e5668]" />
+                <KPICard title="Total Tickets" value={totalTickets} icon={Ticket} color="text-[#b0bf00]" />
+                <KPICard title="Active Admins" value={activeAdmins} icon={Shield} color="text-[#4e5668]" />
               </div>
 
               {/* Tickets Table */}
-              <Card className="shadow-sm border-gray-200">
-                <CardHeader className="border-b border-gray-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+                <CardHeader className="border-b border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div>
-                    <CardTitle>All System Tickets</CardTitle>
-                    <CardDescription>View and manage tickets across all departments</CardDescription>
+                    <CardTitle className="text-white">All System Tickets</CardTitle>
+                    <CardDescription className="text-slate-400">View and manage tickets across all departments</CardDescription>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                     <div className="relative w-full sm:w-[250px]">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
                       <Input
                         placeholder="Search tickets..."
-                        className="pl-8"
+                        className="pl-8 bg-slate-800/50 border-slate-700 text-white"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
                     </div>
                     <Select value={filterStatus} onValueChange={setFilterStatus}>
-                      <SelectTrigger className="w-full sm:w-[150px]">
-                        <Filter className="w-4 h-4 mr-2 text-gray-500" />
+                      <SelectTrigger className="w-full sm:w-[150px] bg-slate-800/50 border-slate-700 text-white">
+                        <Filter className="w-4 h-4 mr-2 text-slate-400" />
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -187,12 +231,26 @@ export default function SuperAdminDashboard() {
                         <SelectItem value="closed">Closed</SelectItem>
                       </SelectContent>
                     </Select>
+                    <Select value={sortOption} onValueChange={setSortOption}>
+                      <SelectTrigger className="w-full sm:w-[180px] bg-slate-800/50 border-slate-700 text-white">
+                        <ArrowDownUp className="w-4 h-4 mr-2 text-slate-400" />
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="date-desc">Date (Newest)</SelectItem>
+                        <SelectItem value="date-asc">Date (Oldest)</SelectItem>
+                        <SelectItem value="name-asc">Requester (A-Z)</SelectItem>
+                        <SelectItem value="name-desc">Requester (Z-A)</SelectItem>
+                        <SelectItem value="priority-desc">Priority (High-Low)</SelectItem>
+                        <SelectItem value="priority-asc">Priority (Low-High)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Table>
                     <TableHeader>
-                      <TableRow>
+                      <TableRow className="border-b-slate-700">
                         <TableHead>ID</TableHead>
                         <TableHead>Subject</TableHead>
                         <TableHead>Requester</TableHead>
@@ -204,15 +262,15 @@ export default function SuperAdminDashboard() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredTickets.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                      {sortedAndFilteredTickets.length === 0 ? (
+                        <TableRow className="border-b-0">
+                          <TableCell colSpan={8} className="text-center py-8 text-slate-400">
                             No tickets found matching your filters.
                           </TableCell>
                         </TableRow>
                       ) : (
-                        filteredTickets.map((ticket) => (
-                          <TableRow key={ticket.id}>
+                        sortedAndFilteredTickets.map((ticket) => (
+                          <TableRow key={ticket.id} className="border-b-slate-800 hover:bg-slate-800/50">
                             <TableCell className="font-medium">{ticket.id}</TableCell>
                             <TableCell className="max-w-xs truncate">{ticket.subject}</TableCell>
                             <TableCell>{ticket.employeeName}</TableCell>
@@ -221,7 +279,7 @@ export default function SuperAdminDashboard() {
                             <TableCell>{ticket.assignedTo || "Unassigned"}</TableCell>
                             <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
                             <TableCell>
-                              <Link to={`/ticket/${ticket.id}`}>
+                              <Link to={`/ticket/${ticket.id}`} className="text-lime-400 hover:text-lime-300">
                                 <Button variant="ghost" size="sm">View</Button>
                               </Link>
                             </TableCell>
@@ -236,13 +294,13 @@ export default function SuperAdminDashboard() {
           )}
 
           {activeTab === "users" && (
-            <Card className="shadow-sm border-gray-200">
-              <CardHeader className="border-b border-gray-200 flex flex-row items-center justify-between">
+            <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+              <CardHeader className="border-b border-slate-700 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>User Management</CardTitle>
-                  <CardDescription>Manage employees, HR staff, and admins</CardDescription>
+                  <CardTitle className="text-white">User Management</CardTitle>
+                  <CardDescription className="text-slate-400">Manage employees, HR staff, and admins</CardDescription>
                 </div>
-                <Button size="sm" className="bg-slate-900 text-white" onClick={() => setIsAddUserModalOpen(true)}>
+                <Button size="sm" className="bg-[#4e5668] text-white hover:bg-[#4e5668]/90" onClick={() => setIsAddUserModalOpen(true)}>
                   <UserPlus className="w-4 h-4 mr-2" />
                   Add User
                 </Button>
@@ -250,7 +308,7 @@ export default function SuperAdminDashboard() {
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="border-b-slate-700">
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Role</TableHead>
@@ -260,23 +318,23 @@ export default function SuperAdminDashboard() {
                   </TableHeader>
                   <TableBody>
                     {allUsers.map((user) => (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.id} className="border-b-slate-800 hover:bg-slate-800/50">
                         <TableCell className="font-medium">{user.name}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                            ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
-                              user.role === 'hr' ? 'bg-blue-100 text-blue-800' : 
-                              'bg-gray-100 text-gray-800'}`}>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
+                            user.role === 'admin' ? 'bg-[#4e5668]/10 text-[#4e5668]' : 
+                            user.role === 'hr' ? 'bg-[#b0bf00]/20 text-[#828d00]' : 
+                            'bg-slate-100 text-slate-800'}`}>
                             {user.role}
                           </span>
                         </TableCell>
                         <TableCell>{user.department || "-"}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="sm">Edit</Button>
+                            <Button variant="ghost" size="sm" className="text-lime-400 hover:text-lime-300">Edit</Button>
                             {user.role === 'admin' && (
-                                <Button variant="outline" size="sm" className="text-xs">
+                                <Button variant="outline" size="sm" className="text-xs border-amber-500 text-amber-500 hover:bg-amber-500/10 hover:text-amber-400">
                                   <Shield className="w-3 h-3 mr-1" />
                                   Grant Authority
                                 </Button>
@@ -292,15 +350,15 @@ export default function SuperAdminDashboard() {
           )}
 
           {activeTab === "activity" && (
-            <Card className="shadow-sm border-gray-200">
-              <CardHeader className="border-b border-gray-200">
-                <CardTitle>System Activity Log</CardTitle>
-                <CardDescription>Trace actions performed by Office Heads, HR, and Admins</CardDescription>
+            <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+              <CardHeader className="border-b border-slate-700">
+                <CardTitle className="text-white">System Activity Log</CardTitle>
+                <CardDescription className="text-slate-400">Trace actions performed by Office Heads, HR, and Admins</CardDescription>
               </CardHeader>
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="border-b-slate-700">
                       <TableHead>User</TableHead>
                       <TableHead>Action</TableHead>
                       <TableHead>Target</TableHead>
@@ -310,11 +368,11 @@ export default function SuperAdminDashboard() {
                   </TableHeader>
                   <TableBody>
                     {mockActivities.map((log) => (
-                      <TableRow key={log.id}>
+                      <TableRow key={log.id} className="border-b-slate-800 hover:bg-slate-800/50">
                         <TableCell className="font-medium">{log.user}</TableCell>
                         <TableCell>{log.action}</TableCell>
                         <TableCell>{log.target}</TableCell>
-                        <TableCell className="text-gray-500">{log.time}</TableCell>
+                        <TableCell className="text-slate-500">{log.time}</TableCell>
                         <TableCell>
                           <Button variant="ghost" size="icon" className="h-8 w-8">
                             <MoreHorizontal className="w-4 h-4" />
@@ -367,7 +425,7 @@ export default function SuperAdminDashboard() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddUserModalOpen(false)}>Cancel</Button>
-            <Button onClick={handleCreateUser}>Create User</Button>
+            <Button onClick={handleCreateUser} className="bg-[#4e5668] text-white hover:bg-[#4e5668]/90">Create User</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

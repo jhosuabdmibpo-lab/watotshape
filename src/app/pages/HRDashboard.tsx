@@ -58,9 +58,9 @@ export default function HRDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-2">
@@ -71,14 +71,14 @@ export default function HRDashboard() {
                 <span className="text-white font-bold text-sm">HR</span>
               </div>
               <div>
-                <span className="font-semibold text-lg">HR Ticketing</span>
-                <p className="text-xs text-gray-500">HR Dashboard</p>
+                <span className="font-semibold text-lg text-[#4e5668]">HR Ticketing</span>
+                <p className="text-xs text-slate-500">HR Dashboard</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.role.toUpperCase()}</p>
+                <p className="text-xs text-slate-500">{user.role.toUpperCase()}</p>
               </div>
               <Button
                 variant="ghost"
@@ -95,8 +95,8 @@ export default function HRDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900">Assigned Tickets</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-3xl font-semibold text-[#4e5668]">Assigned Tickets</h1>
+          <p className="text-slate-600 mt-1">
             Manage tickets for:{" "}
             <span className="font-medium">{user.assignedCategories?.join(", ")}</span>
           </p>
@@ -108,13 +108,13 @@ export default function HRDashboard() {
             title="Total Assigned"
             value={totalTickets}
             icon={Ticket}
-            color="text-blue-600"
+            color="text-[#4e5668]"
           />
           <KPICard
             title="Open/In Progress"
             value={openTickets}
             icon={FolderOpen}
-            color="text-orange-600"
+            color="text-[#b0bf00]"
           />
           <KPICard
             title="Waiting"
@@ -125,10 +125,10 @@ export default function HRDashboard() {
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-4 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Category</label>
+              <label className="text-sm font-medium text-slate-700">Category</label>
               <Select value={filterCategory} onValueChange={setFilterCategory}>
                 <SelectTrigger className="h-10">
                   <SelectValue />
@@ -145,7 +145,7 @@ export default function HRDashboard() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Status</label>
+              <label className="text-sm font-medium text-slate-700">Status</label>
               <Select value={filterStatus} onValueChange={setFilterStatus}>
                 <SelectTrigger className="h-10">
                   <SelectValue />
@@ -164,8 +164,8 @@ export default function HRDashboard() {
         </div>
 
         {/* Tickets Table */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200">
+          <div className="p-6 border-b border-slate-200">
             <h2 className="text-lg font-semibold">My Assigned Tickets</h2>
           </div>
           <Table>
@@ -195,7 +195,7 @@ export default function HRDashboard() {
                     <TableCell>
                       <div className="text-sm">
                         <div className="font-medium">{ticket.category}</div>
-                        <div className="text-gray-500 text-xs">{ticket.subcategory}</div>
+                        <div className="text-slate-500 text-xs">{ticket.subcategory}</div>
                       </div>
                     </TableCell>
                     <TableCell className="max-w-xs truncate">{ticket.subject}</TableCell>
