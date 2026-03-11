@@ -41,7 +41,7 @@ export default function UserEdit() {
   return (
     <div className="flex min-h-screen bg-slate-50">
       <AdminSidebar />
-      <div className="flex-1 overflow-auto" style={{
+      <div className="flex-1 ml-64 overflow-auto" style={{
         backgroundImage: `url(${logo}), linear-gradient(135deg, #f7f9e6 0%, #eef2cc 100%)`,
         backgroundRepeat: 'no-repeat, no-repeat',
         backgroundPosition: 'center',

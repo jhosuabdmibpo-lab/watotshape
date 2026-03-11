@@ -83,15 +83,13 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Honeycomb Backgrounds - fully visible corners */}
-      <HoneycombPattern className="top-0 left-0 scale-150 z-0" />
-      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180 z-0" />
+    <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar />
 
-      <div className="flex-1 overflow-auto relative z-10">
+      <div className="flex-1 ml-64 overflow-auto min-w-0">
         <div className="max-w-7xl mx-auto px-8 py-8">
-          {/* Header with User Info and Logout */}
+          <div className="space-y-8">
+            {/* Header with User Info and Logout */}
           <div className="flex justify-end items-center mb-8">
             <div className="flex items-center gap-4">
               <div className="text-right">
@@ -239,7 +237,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Tickets Table */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
             <div className="p-6 border-b border-gray-200">
               <h2 className="text-lg font-semibold">All Tickets</h2>
             </div>
@@ -284,6 +282,7 @@ export default function AdminDashboard() {
                 ))}
               </TableBody>
             </Table>
+          </div>
           </div>
         </div>
       </div>

@@ -46,8 +46,7 @@ import {
   Search,
   Filter,
   MoreHorizontal,
-  ArrowDownUp,
-  Settings
+  ArrowDownUp
 } from "lucide-react";
 import { mockTickets, mockUsers } from "../data/mockData";
 import { format } from "date-fns";
@@ -123,7 +122,7 @@ export default function SuperAdminDashboard() {
     <div className="flex min-h-screen bg-slate-50">
       <AdminSidebar />
 
-      <div className="flex-1 overflow-auto" style={{
+      <div className="flex-1 ml-64 overflow-auto" style={{
         backgroundImage: `url(${logo}), linear-gradient(135deg, #f7f9e6 0%, #eef2cc 100%)`,
         backgroundRepeat: 'no-repeat, no-repeat',
         backgroundPosition: 'center',
@@ -164,29 +163,6 @@ export default function SuperAdminDashboard() {
                 <UserPlus className="w-4 h-4 mr-2" />
                 Add New User
               </Button>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant={"outline"} size="icon" className="bg-white shadow-md">
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-56">
-                  <div className="grid gap-4">
-                    <div className="space-y-2">
-                      <h4 className="font-medium leading-none">System Settings</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Manage global configurations.
-                      </p>
-                    </div>
-                    <div className="grid gap-1">
-                      <Button variant="ghost" className="w-full justify-start text-sm font-normal">Email Notifications</Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm font-normal">Security & Roles</Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm font-normal">API & Integrations</Button>
-                      <Button variant="ghost" className="w-full justify-start text-sm font-normal">System Maintenance</Button>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
             </div>
           </div>
 
@@ -376,16 +352,12 @@ export default function SuperAdminDashboard() {
                         <TableCell>{user.department || "-"}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="sm" className="text-lime-400 hover:text-lime-300">
-                              <Link to={`/superadmin/edit/${user.id}`}>Edit</Link>
-                            </Button>
+                            <Button variant="ghost" size="sm" className="text-lime-400 hover:text-lime-300">Edit</Button>
                             {user.role === 'admin' && (
-                                <Link to={`/superadmin/authority/${user.id}`}>
-                                  <Button variant="outline" size="sm" className="text-xs border-amber-500 text-amber-500 hover:bg-amber-500/10 hover:text-amber-400">
-                                    <Shield className="w-3 h-3 mr-1" />
-                                    Grant Authority
-                                  </Button>
-                                </Link>
+                                <Button variant="outline" size="sm" className="text-xs border-amber-500 text-amber-500 hover:bg-amber-500/10 hover:text-amber-400">
+                                  <Shield className="w-3 h-3 mr-1" />
+                                  Grant Authority
+                                </Button>
                             )}
                           </div>
                         </TableCell>

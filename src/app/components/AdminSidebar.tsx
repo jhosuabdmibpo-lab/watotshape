@@ -36,7 +36,7 @@ const NavLink = ({ to, icon: Icon, children, exact = false }) => {
 export function AdminSidebar() {
   return (
     <div
-      className="w-64 text-white flex flex-col h-screen sticky top-0"
+      className="w-64 text-white flex flex-col h-screen fixed left-0 top-0 z-50"
       style={{ background: "linear-gradient(180deg, #020e27 0%, #4d5900 100%)" }}
     >
       <div className="flex items-center justify-center p-4 border-b border-white/10 h-20">
