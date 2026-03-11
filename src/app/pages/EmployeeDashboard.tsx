@@ -10,7 +10,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow,\
 } from "../components/ui/table";
 import { Ticket, FolderOpen, CheckCircle, PlusCircle } from "lucide-react";
 import { mockTickets } from "../data/mockData";

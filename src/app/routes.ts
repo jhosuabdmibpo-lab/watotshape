@@ -4,6 +4,8 @@ import { EmployeeDashboard, CreateTicket, TicketDetail } from "./features/employ
 import { HRPage, HREmployees } from "./features/hr";
 import { AdminDashboard } from "./features/admin";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
+import AuthorityManagement from "./pages/AuthorityManagement";
+import UserEdit from "./pages/UserEdit";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ export const router = createBrowserRouter([
   {
     path: "/superadmin",
     Component: SuperAdminDashboard,
+  },
+  {
+    path: "/superadmin/authority/:userId",
+    Component: AuthorityManagement,
+  },
+  {
+    path: "/superadmin/edit/:userId",
+    Component: UserEdit,
   },
   {
     path: "/ticket/:id",
