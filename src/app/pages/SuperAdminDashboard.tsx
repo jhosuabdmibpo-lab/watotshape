@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { mockTickets, mockUsers } from "../data/mockData";
 import { format } from "date-fns";
+import logo from "../../assets/logo.png";
 
 // Mock Activity Logs
 const mockActivities = [
@@ -121,7 +122,14 @@ export default function SuperAdminDashboard() {
     <div className="flex min-h-screen bg-slate-50">
       <AdminSidebar />
 
-      <div className="flex-1 overflow-auto" style={{ background: "linear-gradient(135deg, #f7f9e6 0%, #eef2cc 100%)" }}>
+      <div className="flex-1 overflow-auto" style={{
+        backgroundImage: `url(${logo}), linear-gradient(135deg, #f7f9e6 0%, #eef2cc 100%)`,
+        backgroundRepeat: 'no-repeat, no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: '500px, cover',
+        backgroundBlendMode: 'soft-light',
+        backgroundAttachment: 'fixed',
+      }}>
         <div className="max-w-7xl mx-auto px-8 py-8">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -202,7 +210,13 @@ export default function SuperAdminDashboard() {
               </div>
 
               {/* Tickets Table */}
-              <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+              <Card
+                className="border-slate-700 text-slate-300"
+                style={{
+                  background: 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%), linear-gradient(180deg, #2c3e50 0%, #0f172a 100%)',
+                  boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6)'
+                }}
+              >
                 <CardHeader className="border-b border-slate-700 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div>
                     <CardTitle className="text-white">All System Tickets</CardTitle>
@@ -251,14 +265,14 @@ export default function SuperAdminDashboard() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-b-slate-700">
-                        <TableHead>ID</TableHead>
-                        <TableHead>Subject</TableHead>
-                        <TableHead>Requester</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Priority</TableHead>
-                        <TableHead>Assigned To</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead></TableHead>
+                        <TableHead style={{ width: '100px', color: 'white' }}>ID</TableHead>
+                        <TableHead style={{ color: 'white' }}>Subject</TableHead>
+                        <TableHead style={{ color: 'white' }}>Requester</TableHead>
+                        <TableHead style={{ color: 'white' }}>Status</TableHead>
+                        <TableHead style={{ color: 'white' }}>Priority</TableHead>
+                        <TableHead style={{ color: 'white' }}>Assigned To</TableHead>
+                        <TableHead style={{ color: 'white' }}>Date</TableHead>
+                        <TableHead style={{ color: 'white' }}></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -294,7 +308,13 @@ export default function SuperAdminDashboard() {
           )}
 
           {activeTab === "users" && (
-            <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+            <Card
+              className="border-slate-700 text-slate-300"
+              style={{
+                background: 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%), linear-gradient(180deg, #2c3e50 0%, #0f172a 100%)',
+                boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6)'
+              }}
+            >
               <CardHeader className="border-b border-slate-700 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-white">User Management</CardTitle>
@@ -309,11 +329,11 @@ export default function SuperAdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b-slate-700">
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Department</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead style={{ color: 'white' }}>Name</TableHead>
+                      <TableHead style={{ color: 'white' }}>Email</TableHead>
+                      <TableHead style={{ color: 'white' }}>Role</TableHead>
+                      <TableHead style={{ color: 'white' }}>Department</TableHead>
+                      <TableHead className="text-right" style={{ color: 'white' }}>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -350,7 +370,13 @@ export default function SuperAdminDashboard() {
           )}
 
           {activeTab === "activity" && (
-            <Card className="shadow-sm border-slate-700 bg-[#020e27] text-slate-300">
+            <Card
+              className="border-slate-700 text-slate-300"
+              style={{
+                background: 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%), linear-gradient(180deg, #2c3e50 0%, #0f172a 100%)',
+                boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 10px 30px rgba(0, 0, 0, 0.6)'
+              }}
+            >
               <CardHeader className="border-b border-slate-700">
                 <CardTitle className="text-white">System Activity Log</CardTitle>
                 <CardDescription className="text-slate-400">Trace actions performed by Office Heads, HR, and Admins</CardDescription>
@@ -359,11 +385,11 @@ export default function SuperAdminDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow className="border-b-slate-700">
-                      <TableHead>User</TableHead>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Target</TableHead>
-                      <TableHead>Time</TableHead>
-                      <TableHead></TableHead>
+                      <TableHead style={{ color: 'white' }}>User</TableHead>
+                      <TableHead style={{ color: 'white' }}>Action</TableHead>
+                      <TableHead style={{ color: 'white' }}>Target</TableHead>
+                      <TableHead style={{ color: 'white' }}>Time</TableHead>
+                      <TableHead style={{ color: 'white' }}></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

@@ -85,11 +85,11 @@ export default function AdminDashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50 relative overflow-hidden">
       {/* Honeycomb Backgrounds - fully visible corners */}
-      <HoneycombPattern className="top-0 left-0 scale-150" />
-      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180" />
+      <HoneycombPattern className="top-0 left-0 scale-150 z-0" />
+      <HoneycombPattern className="bottom-0 right-0 scale-150 rotate-180 z-0" />
       <AdminSidebar />
 
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto relative z-10">
         <div className="max-w-7xl mx-auto px-8 py-8">
           {/* Header with User Info and Logout */}
           <div className="flex justify-end items-center mb-8">

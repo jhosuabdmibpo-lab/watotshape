@@ -27,33 +27,6 @@ import {
 } from "lucide-react";
 import { mockTickets, categories } from "../data/mockData";
 
-// --- Honeycomb Pattern Component ---
-const HoneycombPattern = ({ className }: { className?: string }) => (
-  <svg 
-    className={`absolute pointer-events-none ${className}`} 
-    width="250" 
-    height="250" 
-    viewBox="0 0 450 450" 
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <polygon 
-        id="hex-detail" 
-        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
-      />
-    </defs>
-    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
-      <use href="#hex-detail" x="173.2" y="150" />
-      <use href="#hex-detail" x="86.6" y="0" />
-      <use href="#hex-detail" x="259.8" y="0" />
-      <use href="#hex-detail" x="0" y="150" />
-      <use href="#hex-detail" x="346.4" y="150" />
-      <use href="#hex-detail" x="86.6" y="300" />
-      <use href="#hex-detail" x="259.8" y="300" />
-    </g>
-  </svg>
-);
-
 export default function TicketDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,6 +37,13 @@ export default function TicketDetail() {
   const [assignedTo, setAssignedTo] = useState(ticket?.assignedTo || "");
   const [newComment, setNewComment] = useState("");
   const [internalNote, setInternalNote] = useState("");
+
+  const getBackLink = () => {
+    if (user.role === "admin") return "/admin";
+    if (user.role === "superadmin") return "/superadmin";
+    if (user.role === "hr") return "/hr";
+    return "/employee";
+  };
 
   // Get HR staff allowed for this ticket's category
   const allowedHRForCategory =
@@ -79,7 +59,7 @@ export default function TicketDetail() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">Ticket not found</h2>
-          <Button onClick={() => navigate(user.role === "admin" ? "/admin" : user.role === "hr" ? "/hr" : "/employee")}>
+          <Button onClick={() => navigate(getBackLink())}>
             Go to Dashboard
           </Button>
         </div>
@@ -89,7 +69,7 @@ export default function TicketDetail() {
 
   // Check if user has access to this ticket
   const canViewTicket = () => {
-    if (user.role === "admin") return true;
+    if (user.role === "admin" || user.role === "superadmin") return true;
     if (user.role === "hr") {
       return user.assignedCategories?.includes(ticket.category);
     }
@@ -105,7 +85,7 @@ export default function TicketDetail() {
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">Access Denied</h2>
           <p className="text-gray-600 mb-4">You don't have permission to view this ticket.</p>
-          <Button onClick={() => navigate(user.role === "admin" ? "/admin" : user.role === "hr" ? "/hr" : "/employee")}>
+          <Button onClick={() => navigate(getBackLink())}>
             Go to Dashboard
           </Button>
         </div>
@@ -127,21 +107,11 @@ export default function TicketDetail() {
     }
   };
 
-  const getBackLink = () => {
-    if (user.role === "admin") return "/admin";
-    if (user.role === "hr") return "/hr";
-    return "/employee";
-  };
-
   const canUpdateStatus = hasPermission("update_ticket_status");
   const canReassign = hasPermission("reassign_tickets");
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
-      {/* Honeycomb Backgrounds - bottom-right and top-right, behind content */}
-      <HoneycombPattern className="top-0 right-0 translate-x-[20%] -translate-y-[20%] scale-110 z-0" />
-      <HoneycombPattern className="bottom-0 right-0 translate-x-[20%] translate-y-[20%] scale-110 rotate-180 z-0" />
-      
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -323,7 +293,7 @@ export default function TicketDetail() {
             </Card>
 
             {/* Internal Notes (HR/Admin Only) */}
-            {(user.role === "hr" || user.role === "admin") && (
+            {(user.role === "hr" || user.role === "admin" || user.role === "superadmin") && (
               <Card className="shadow-sm border-gray-200 border-orange-200 bg-orange-50/30">
                 <CardHeader className="border-b border-orange-200">
                   <CardTitle className="flex items-center gap-2 text-lg text-orange-900">
@@ -370,7 +340,7 @@ export default function TicketDetail() {
                           <SelectItem value="in-progress">In Progress</SelectItem>
                           <SelectItem value="waiting">Waiting</SelectItem>
                           <SelectItem value="resolved">Resolved</SelectItem>
-                          {user.role === "admin" && <SelectItem value="closed">Closed</SelectItem>}
+                          {(user.role === "admin" || user.role === "superadmin") && <SelectItem value="closed">Closed</SelectItem>}
                         </SelectContent>
                       </Select>
                     </div>

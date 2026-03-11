@@ -50,7 +50,7 @@ export default function App() {
   const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"employee" | "hr" | "admin" | "superadmin">("employee");
+  const [selectedRole, setSelectedRole] = useState<"employee" | "hr" | "admin" | "mainadmin" | "superadmin">("employee");
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +69,15 @@ export default function App() {
       mockUser = mockUsers.find(u => u.role === "hr")!;
     } else if (selectedRole === "admin") {
       mockUser = mockUsers.find(u => u.role === "admin")!;
-    } else {
+    } else if (selectedRole === "mainadmin") {
+      mockUser = {
+        id: "MAIN-001",
+        name: "Main Admin",
+        email: "mainadmin@company.com",
+        role: "mainadmin" as const,
+        department: "IT",
+      };
+    } else if (selectedRole === "superadmin") {
       mockUser = {
         id: "SA-001",
         name: "Super Admin",
@@ -86,6 +94,8 @@ export default function App() {
       navigate("/admin");
     } else if (selectedRole === "hr") {
       navigate("/hr");
+    } else if (selectedRole === "mainadmin") {
+      navigate("/admin");
     } else if (selectedRole === "superadmin") {
       navigate("/superadmin");
     } else {
@@ -235,6 +245,27 @@ export default function App() {
                 </Button>
                 <Button
                   type="button"
+                  variant={selectedRole === "mainadmin" ? "default" : "outline"}
+                  onClick={() => setSelectedRole("mainadmin")}
+                  size="sm"
+                  className={`flex-1 transition-all duration-200 shadow-sm font-medium ${
+                    selectedRole === "mainadmin" 
+                      ? "text-white border-none" 
+                      : "bg-white text-slate-700 border-slate-200"
+                  }`}
+                  style={{
+                    background: selectedRole === "mainadmin"
+                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)"
+                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)",
+                    boxShadow: selectedRole === "mainadmin"
+                      ? "inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2)"
+                      : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
+                  }}
+                >
+                  Main Admin
+                </Button>
+                <Button
+                  type="button"
                   variant={selectedRole === "superadmin" ? "default" : "outline"}
                   onClick={() => setSelectedRole("superadmin")}
                   size="sm"
@@ -262,4 +293,3 @@ export default function App() {
     </div>
   );
 }
-
