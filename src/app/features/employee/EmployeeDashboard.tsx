@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import { EmployeeNavbar } from "../components/EmployeeNavbar";
-import { KPICard } from "../components/KPICard";
-import { StatusBadge } from "../components/StatusBadge";
-import { Button } from "../components/ui/button";
+import { useAuth } from "../../contexts/AuthContext";
+import { EmployeeNavbar } from "../../components/EmployeeNavbar";
+import { KPICard } from "../../components/KPICard";
+import { StatusBadge } from "../../components/StatusBadge";
+import { Button } from "../../components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,9 +11,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
+} from "../../components/ui/table";
 import { Ticket, FolderOpen, CheckCircle, PlusCircle } from "lucide-react";
-import { mockTickets } from "../data/mockData";
+import { mockTickets } from "../../data/mockData";
 
 // --- Honeycomb Pattern Component ---
 const HoneycombPattern = ({ className }: { className?: string }) => (
@@ -92,14 +92,7 @@ export default function EmployeeDashboard() {
         <div className="mb-6">
           <Link to="/employee/create-ticket">
             <Button 
-              style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)', background: `linear-gradient(
-              to bottom, 
-              #e2ec4f 10%,
-              #becf02 20%,
-              #aebb00 70%,
-              #8f9900 100%
-            )`
-              }}
+              style={{ backgroundColor: 'rgb(176, 191, 0)', borderColor: 'rgb(176, 191, 0)' }}
               className="hover:bg-opacity-90 h-11 text-white"
             >
               <PlusCircle className="w-4 h-4 mr-2" />
@@ -163,3 +156,4 @@ export default function EmployeeDashboard() {
     </div>
   );
 }
+

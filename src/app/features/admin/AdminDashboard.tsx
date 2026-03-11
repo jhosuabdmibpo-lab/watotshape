@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { AdminSidebar } from "../components/AdminSidebar";
-import { KPICard } from "../components/KPICard";
-import { StatusBadge } from "../components/StatusBadge";
-import { PriorityBadge } from "../components/PriorityBadge";
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { AdminSidebar } from "../../components/AdminSidebar";
+import { KPICard } from "../../components/KPICard";
+import { StatusBadge } from "../../components/StatusBadge";
+import { PriorityBadge } from "../../components/PriorityBadge";
+import { Button } from "../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select";
+} from "../../components/ui/select";
 import {
   Table,
   TableBody,
@@ -20,10 +20,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
+} from "../../components/ui/table";
 import { Ticket, FolderOpen, AlertCircle, Clock, Users, LogOut } from "lucide-react";
-import { mockTickets, categories, hrStaff } from "../data/mockData";
-import { useAuth } from "../contexts/AuthContext";
+import { mockTickets, categories, hrStaff } from "../../data/mockData";
+import { useAuth } from "../../contexts/AuthContext";
 
 // --- Honeycomb Pattern Component ---
 const HoneycombPattern = ({ className }: { className?: string }) => (
@@ -290,3 +290,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

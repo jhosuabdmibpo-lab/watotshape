@@ -1,10 +1,14 @@
-import { Link, useLocation } from "react-router";
-import {
-  LayoutDashboard,
+import { Link, useLocation, useNavigate } from "react-router";
+import { cn } from "../components/ui/utils";
+import { 
+  LayoutDashboard, 
+  Ticket, 
+  UserCircle, 
+  FileText, 
+  Settings,
   ShieldCheck,
   Users,
-  Settings,
-  Building2,
+  Building2
 } from "lucide-react";
 import logo from "../../assets/logo.png";
 
@@ -13,6 +17,7 @@ const NavLink = ({ to, icon: Icon, children, exact = false }) => {
   const isActive = exact
     ? location.pathname === to
     : location.pathname.startsWith(to);
+
   return (
     <Link
       to={to}
@@ -55,3 +60,4 @@ export function AdminSidebar() {
     </div>
   );
 }
+

@@ -1,10 +1,14 @@
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../components/ui/utils";
-import { Home, PlusCircle } from "lucide-react";
+import { Home, PlusCircle, LogOut } from "lucide-react";
+import { Button } from "../components/ui/button";
 import logo from "../../assets/logo.png";
 
 export function EmployeeNavbar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const navItems = [
     { path: "/employee", label: "Home", icon: Home },
@@ -41,6 +45,21 @@ export function EmployeeNavbar() {
                 </Link>
               );
             })}
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-sm font-medium">{user.name}</p>
+              <p className="text-xs text-gray-500">{user.role.toUpperCase()}</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/")}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
           </div>
         </div>
       </div>

@@ -1,15 +1,51 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Building2 } from "lucide-react";
-import { mockUsers } from "../data/mockData";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../components/ui/card";
 import logo from "../../assets/logo.png";
+import "../../styles/login.css";
 
-export default function LoginPage() {
+// --- Mock Data ---
+const mockUsers = [
+  { id: "HR-001", name: "HR Admin", email: "hr@company.com", role: "hr" as const },
+  { id: "SYS-001", name: "System Admin", email: "admin@company.com", role: "admin" as const }
+];
+
+// --- Custom SVG Components ---
+
+// Honeycomb Pattern Component
+const HoneycombPattern = ({ className }) => (
+  <svg 
+    className={`absolute pointer-events-none ${className}`} 
+    width="250" 
+    height="250" 
+    viewBox="0 0 450 450" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      {/* Pointy-topped hexagon with Radius = 100 */}
+      <polygon 
+        id="hex" 
+        points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" 
+      />
+    </defs>
+    {/* Group with opacity so overlapping strokes don't multiply in darkness */}
+    <g opacity="0.6" stroke="#C9D866" strokeWidth="12" fill="none" strokeLinejoin="round">
+      <use href="#hex" x="173.2" y="150" />
+      <use href="#hex" x="86.6" y="0" />
+      <use href="#hex" x="259.8" y="0" />
+      <use href="#hex" x="0" y="150" />
+      <use href="#hex" x="346.4" y="150" />
+      <use href="#hex" x="86.6" y="300" />
+      <use href="#hex" x="259.8" y="300" />
+    </g>
+  </svg>
+);
+
+
+// --- Main Page Component ---
+export default function App() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
   const [email, setEmail] = useState("");
@@ -26,7 +62,7 @@ export default function LoginPage() {
         id: "EMP-1234",
         name: "Sarah Johnson",
         email: "sarah.johnson@company.com",
-        role: "employee" as const,
+        role: "employee",
         department: "Engineering",
       };
     } else if (selectedRole === "hr") {
@@ -38,7 +74,7 @@ export default function LoginPage() {
         id: "SA-001",
         name: "Super Admin",
         email: "super@company.com",
-        role: "superadmin" as any,
+        role: "superadmin" as const,
         department: "IT",
       };
     }
@@ -77,45 +113,40 @@ export default function LoginPage() {
               alt="HR Ticketing System Logo" 
               className="w-16 h-16 rounded-2xl object-cover"/>
           </div>
-          <div>
-            <CardTitle className="text-2xl">HR Ticketing System</CardTitle>
-            <CardDescription className="mt-2">
-              Sign in to access your account
-            </CardDescription>
-          </div>
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-black leading-tight">
+            HUMAN RESOURCE<br/>TICKETING
+          </h1>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Employee ID / Email</Label>
-              <Input
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-1.5 text-left">
+              <label htmlFor="email" className="text-sm font-medium text-gray-800">
+                Employee ID/ Email
+              </label>
+              <input
                 id="email"
                 type="text"
-                placeholder="Enter your employee ID or email"
+                placeholder="Enter your Employee ID or Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11"
+                className="w-full h-11 px-3 py-2 bg-gray-100 border-none rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#b0bf00]/50 transition-shadow"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
+            <div className="space-y-1.5 text-left">
+              <label htmlFor="password" className="text-sm font-medium text-gray-800">
+                Password
+              </label>
+              <input
                 id="password"
                 type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-11"
+                className="w-full h-11 px-3 py-2 bg-gray-100 border-none rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#b0bf00]/50 transition-shadow"
               />
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <a href="#" className="text-blue-600 hover:text-blue-700 hover:underline">
-                Forgot Password?
-              </a>
             </div>
 
             <Button 
@@ -151,8 +182,8 @@ export default function LoginPage() {
                   }`}
                   style={{
                     background: selectedRole === "employee"
-                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)" // Glossy Navy (Active)
-                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)", // Glossy White (Inactive)
+                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)"
+                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)",
                     boxShadow: selectedRole === "employee"
                       ? "inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2)"
                       : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
@@ -161,6 +192,7 @@ export default function LoginPage() {
                   Employee
                 </Button>
                 <Button
+                  type="button"
                   variant={selectedRole === "hr" ? "default" : "outline"}
                   onClick={() => setSelectedRole("hr")}
                   size="sm"
@@ -171,12 +203,12 @@ export default function LoginPage() {
                   }`}
                   style={{
                     background: selectedRole === "hr"
-                      ? "linear-gradient(to bottom, #1a2a44 0%, #0a1428 100%)" // Glossy Navy for active
-                      : "linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%)", // Glossy White for inactive
+                      ? "linear-gradient(to bottom, #1a2a44 0%, #0a1428 100%)"
+                      : "linear-gradient(to bottom, #ffffff 0%, #f9fafb 100%)",
                     boxShadow: selectedRole === "hr"
                       ? "inset 0 1px 0 rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.2)"
                       : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
-                }}
+                  }}
                 >
                   HR
                 </Button>
@@ -192,13 +224,13 @@ export default function LoginPage() {
                   }`}
                   style={{
                     background: selectedRole === "admin"
-                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)" // Glossy Navy (Active)
-                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)", // Glossy White (Inactive)
+                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)"
+                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)",
                     boxShadow: selectedRole === "admin"
                       ? "inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2)"
                       : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
                   }}
-                  >
+                >
                   Admin
                 </Button>
                 <Button
@@ -213,13 +245,13 @@ export default function LoginPage() {
                   }`}
                   style={{
                     background: selectedRole === "superadmin"
-                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)" // Glossy Navy (Active)
-                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)", // Glossy White (Inactive)
+                      ? "linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)"
+                      : "linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%)",
                     boxShadow: selectedRole === "superadmin"
                       ? "inset 0 1px 0 rgba(255,255,255,0.15), 0 2px 4px rgba(0,0,0,0.2)"
                       : "inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(0,0,0,0.05)"
                   }}
-                  >
+                >
                   Super Admin
                 </Button>
               </div>
@@ -230,3 +262,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

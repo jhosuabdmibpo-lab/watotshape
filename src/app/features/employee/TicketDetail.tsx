@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { useParams, useNavigate, Link } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import { Button } from "../components/ui/button";
-import { StatusBadge } from "../components/StatusBadge";
-import { PriorityBadge } from "../components/PriorityBadge";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { useAuth } from "../../contexts/AuthContext";
+import { Button } from "../../components/ui/button";
+import { StatusBadge } from "../../components/StatusBadge";
+import { PriorityBadge } from "../../components/PriorityBadge";
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select";
-import { Textarea } from "../components/ui/textarea";
-import { Separator } from "../components/ui/separator";
+} from "../../components/ui/select";
+import { Textarea } from "../../components/ui/textarea";
+import { Separator } from "../../components/ui/separator";
 import {
   ArrowLeft,
   User,
@@ -25,7 +25,7 @@ import {
   UserCheck,
   Lock,
 } from "lucide-react";
-import { mockTickets, categories } from "../data/mockData";
+import { mockTickets, categories } from "../../data/mockData";
 
 // --- Honeycomb Pattern Component ---
 const HoneycombPattern = ({ className }: { className?: string }) => (
@@ -489,3 +489,4 @@ export default function TicketDetail() {
     </div>
   );
 }
+
