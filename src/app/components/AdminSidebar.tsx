@@ -8,7 +8,8 @@ import {
   Settings,
   ShieldCheck,
   Users,
-  Building2
+  Building2,
+  Network
 } from "lucide-react";
 import logo from "../../assets/logo.png";
 
@@ -47,10 +48,18 @@ export function AdminSidebar() {
         <NavLink to="/admin" icon={LayoutDashboard}>
           Admin Dashboard
         </NavLink>
+        <NavLink to="/admin/tickets" icon={Ticket}>
+          Tickets
+        </NavLink>
+        <NavLink to="/admin/assignment-matrix" icon={Network}>
+          Assignment Matrix
+        </NavLink>
+        <NavLink to="/admin/employees" icon={Users}>
+          Employees
+        </NavLink>
         <NavLink to="/superadmin" icon={ShieldCheck}>
           Super Admin
         </NavLink>
-        {/* You can add more links here as needed */}
       </nav>
       <div className="p-4 border-t border-white/10">
         <NavLink to="/settings" icon={Settings}>
